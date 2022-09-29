@@ -1,5 +1,9 @@
-#!/usr/bin/env node
+import { parse } from './parser';
 
-console.log('Hello World!');
+export const version = '0.1.0';
 
-export {};
+export function interpret(input: string): any {
+  return evaluate(parse(input));
+}
+
+export function evaluate(input: any): any {}

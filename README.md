@@ -1,4 +1,4 @@
-# build-your-own-lisp
+# Build your own Lisp
 
 - A workshop about building a small lisp interpreter
 
@@ -6,19 +6,8 @@
 
 - Node.js 14+
 
-## How to using
+## How to start / test
 
-- Lunch commands
-  - `npm start`
-    - run cli
-  - `npm run dev`
-    - run force debug cli
-  - `npm run type-check`
-    - run type-check
-  - `npm run build`
-    - run swc
-      - this only development, not production
-  - `npm run test`
-    - launches test runner by watch mode
-  - `npm run coverage`
-    - ~~get coverage report~~
+- Run `npm run repl` to start an interactive Read Eval Print loop
+- Run `npm run file <file>` to run a file
+- Run `npm run test` to run a test watcher
