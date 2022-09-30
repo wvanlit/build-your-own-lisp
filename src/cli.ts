@@ -3,6 +3,8 @@ import { program } from 'commander';
 import { clear, log } from 'console';
 import prompts from 'prompts';
 import kleur from 'kleur';
+import { Environment } from './types';
+import { interpret } from '.';
 
 program
   .command('repl')
@@ -11,6 +13,8 @@ program
     clear();
     log('Running Lisp interperter in REPL mode');
     log('Type `exit` to stop');
+
+    const env = Environment.CreateGlobal();
 
     while (true) {
       const { input } = await prompts({
@@ -22,6 +26,13 @@ program
       const cleanInput = (input as string).trim();
 
       if (cleanInput === 'exit') break;
+
+      try {
+        const value = interpret(cleanInput, env);
+        console.log(kleur.italic(value));
+      } catch (err) {
+        console.log(kleur.bold().red((err as Error).message));
+      }
     }
   });
 

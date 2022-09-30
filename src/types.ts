@@ -34,14 +34,22 @@ export class Environment {
 
   addReducible = (
     symbol: TSymbol,
-    reducer: (
-      previousValue: any,
-      currentValue: any,
-      currentIndex?: number,
-      array?: TExpression[]
-    ) => TExpression
+    reducer: (previousValue: any, currentValue: any) => TExpression
   ) => {
     this.set(symbol, (...expr: TExpression[]) => expr.reduce(reducer));
+  };
+
+  addConditionOnAll = (
+    symbol: TSymbol,
+    condition: (previousValue: any, currentValue: any) => TExpression
+  ) => {
+    this.set(symbol, (...expr: TExpression[]) => {
+      let curr = expr.shift()!;
+      for (const expression of expr) {
+        if (!condition(curr, expression)) return false;
+      }
+      return true;
+    });
   };
 
   static CreateGlobal() {
@@ -56,6 +64,13 @@ export class Environment {
     env.addReducible('-', (prev, curr) => prev - curr);
     env.addReducible('*', (prev, curr) => prev * curr);
     env.addReducible('/', (prev, curr) => prev / curr);
+
+    env.addConditionOnAll('=', (prev, curr) => prev == curr);
+    env.addConditionOnAll('!=', (prev, curr) => prev !== curr);
+    env.addConditionOnAll('>', (prev, curr) => prev > curr);
+    env.addConditionOnAll('>=', (prev, curr) => prev >= curr);
+    env.addConditionOnAll('<', (prev, curr) => prev < curr);
+    env.addConditionOnAll('<=', (prev, curr) => prev <= curr);
 
     env.set('bool?', (...expr: TExpression[]) => isBool(expr[0]));
     env.set('number?', (...expr: TExpression[]) => isNumber(expr[0]));

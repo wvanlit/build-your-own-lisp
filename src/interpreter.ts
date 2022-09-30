@@ -10,6 +10,11 @@ import {
   TAtom,
 } from './types';
 
+const ENABLE_TRACE = false;
+const trace = (msg: string) => {
+  if (ENABLE_TRACE) console.log(msg);
+};
+
 export function evaluate(exp: TExpression, env: Environment): TExpression {
   if (isAtom(exp)) {
     if (isSymbol(exp)) {
@@ -20,19 +25,26 @@ export function evaluate(exp: TExpression, env: Environment): TExpression {
       return exp;
     }
   } else {
+    trace(`List: ${exp}`);
     if ((exp as TList).length === 0) return [];
 
     const [op, ...rest] = (exp as TList)!;
 
     if (op === 'if') {
       const [test, trueBranch, elseBranch] = rest;
-      const next = evaluate(test, env) ? trueBranch : elseBranch;
+      const condition = evaluate(test, env);
+      const next = condition ? trueBranch : elseBranch;
+
+      trace(`If: ${test} = ${condition} => ${next}`);
       return evaluate(next, env);
     }
 
     if (op === 'define') {
-      const [symbol, func] = rest;
-      env.envs[symbol as TSymbol] = func;
+      const [symbol, body] = rest;
+      const evalBody = evaluate(body, env);
+      env.envs[symbol as TSymbol] = evalBody;
+
+      trace(`Define: ${symbol} -> ${evalBody}`);
       return [];
     }
 
@@ -48,7 +60,8 @@ export function evaluate(exp: TExpression, env: Environment): TExpression {
     const procedure = evaluate(op, env) as TProcedure;
     const args = rest.map((ex) => evaluate(ex, env));
 
-    console.log(`Calling ${op} with ${args}`);
+    trace(`Procedure: ${op} (${args})`);
+
     return procedure(...args);
   }
 

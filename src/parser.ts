@@ -9,6 +9,7 @@ export function tokenize(chars: string) {
   return chars
     .replaceAll('(', ' ( ')
     .replaceAll(')', ' ) ')
+    .replaceAll('\n', ' ')
     .split(' ')
     .filter((s) => s !== '');
 }
