@@ -30,4 +30,12 @@ describe('Interpreter', () => {
     expect(interpret('(fib 10)', env)).toEqual(55);
     expect(interpret('(fib 20)', env)).toEqual(6765);
   });
+
+  test('knows the answer to life, the universe and everything', () => {
+    let code = '(define answer (lambda (n) (= n 42)))'
+    const env = Environment.CreateGlobal();
+    expect(interpret(code, env)).toEqual([]);
+    expect(interpret('( answer 42 )', env)).toEqual(true);
+    expect(interpret('( answer 41 )', env)).toEqual(true);
+  })
 });

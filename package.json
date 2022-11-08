@@ -1,47 +1,63 @@
 {
   "name": "build-your-own-lisp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A workshop about building a small lisp interpreter",
+  "main": "index.ts",
+  "repository": "https://https://github.com/wvanlit/build-your-own-lisp.git",
   "author": "Wessel van Lit",
   "license": "MIT",
-  "bin": {
-    "byol": "./dist/cli.js"
-  },
+  "private": false,
   "scripts": {
-    "start": "npm run build-ts && node dist/cli.js",
-    "repl": "npm run build-ts && node dist/cli.js repl",
-    "file": "npm run build-ts && node dist/cli.js run",
-    "dev": "npm run build-ts && node --inspect-brk dist/cli.js",
-    "build": "npm run type-check && npm run build-ts",
-    "build-ts": "rimraf -rf dist/ && swc src/ --config-file .swcrc_build -d dist/",
-    "type-check": "tsc --noEmit",
-    "test": "jest --watch",
-    "test-once": "jest",
-    "coverage": "jest --coverage"
+    "build": "tsc",
+    "serve": "NODE_ENV=development nodemon --exec 'ts-node' src/index.ts",
+    "start": "NODE_ENV=production node dist/index.js",
+    "test": "jest --watchAll",
+    "test:ci": "jest --ci",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint ./src --ext .ts"
   },
   "devDependencies": {
-    "@lycolia/eslint-config": "^0.1.1",
-    "@swc/cli": "^0.1.51",
-    "@swc/core": "^1.2.108",
-    "@swc/jest": "^0.2.5",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.7",
-    "@types/prompts": "^2.0.14",
-    "@typescript-eslint/eslint-plugin": "^5.3.1",
-    "@typescript-eslint/parser": "^5.3.1",
-    "eslint": "^8.2.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^25.2.2",
-    "jest": "^27.3.1",
-    "jest-watch-typeahead": "^1.0.0",
-    "prettier": "^2.4.1",
-    "typescript": "^4.4.4"
+    "@types/jest": "27.5.2",
+    "@typescript-eslint/eslint-plugin": "5.29.0",
+    "@typescript-eslint/parser": "5.29.0",
+    "eslint": "8.11.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "husky": "7.0.4",
+    "jest": "27.5.1",
+    "nodemon": "2.0.15",
+    "prettier": "2.5.1",
+    "ts-jest": "27.1.5",
+    "ts-node": "10.4.0",
+    "typescript": "4.7.4"
   },
-  "keywords": [],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./*.{js,ts}": [
+      "npx prettier --write",
+      "yarn run lint"
+    ]
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.(ts)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.json"
+      }
+    }
+  },
   "dependencies": {
-    "commander": "^9.4.0",
+    "commander": "^9.4.1",
     "kleur": "^4.1.5",
-    "prompts": "^2.4.2",
-    "rimraf": "^3.0.2"
+    "prompts": "^2.4.2"
   }
 }
