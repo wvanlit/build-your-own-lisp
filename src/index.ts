@@ -10,10 +10,3 @@ export function interpret(
 ): any {
   return evaluate(parse(input), env);
 }
-
-export function interpretFile(input: string) {
-  const env = Environment.CreateGlobal();
-  const expressions = input.split(';').filter((i) => i.trim() !== '');
-  const output = expressions.map((e) => interpret(e, env));
-  return output.pop();
-}

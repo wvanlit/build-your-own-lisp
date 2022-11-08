@@ -36,12 +36,4 @@ program
     }
   });
 
-program
-  .command('run <file>')
-  .description('Runs the interpreter on a file')
-  .action((file) => {
-    clear();
-    log('Running: %s', file);
-  });
-
 program.parse(process.argv);
