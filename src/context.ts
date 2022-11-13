@@ -3,33 +3,42 @@ import { Identifier, Token, TokenValue } from "./token";
 export type ExecutionScope = { [key: Identifier]: TokenValue };
 
 export class Context {
-	scope: ExecutionScope;
-	parent: Context | undefined;
+  scope: ExecutionScope;
+  parent: Context | undefined;
 
-	constructor(scope: ExecutionScope, parent?: Context) {
-		this.scope = scope;
-		this.parent = parent;
-	}
+  constructor(scope: ExecutionScope, parent?: Context) {
+    this.scope = scope;
+    this.parent = parent;
+  }
 
-	get(identifier: Identifier) {
-		if (identifier in this.scope) return this.scope[identifier];
-		if (this.parent !== undefined) return this.parent.get(identifier);
-		else throw new Error(`Identifier '${identifier}' could not be found.`);
-	}
+  get(identifier: Identifier) {
+    if (identifier in this.scope) return this.scope[identifier];
+    if (this.parent !== undefined) return this.parent.get(identifier);
+    else throw new Error(`Identifier '${identifier}' could not be found.`);
+  }
 
-	static StandardLibrary(): Context {
-		const operator =
-			(f: (total: any, curr: any) => TokenValue) =>
-			(params: TokenValue[]): TokenValue =>
-				params.reduce((t, c) => f(t, c));
+  set(identifier: Identifier, value: TokenValue) {
+    this.scope[identifier] = value;
+  }
 
-		const scope = {
-			"+": operator((total, curr) => total + curr),
-			"-": operator((total, curr) => total - curr),
-			"/": operator((total, curr) => total / curr),
-			"*": operator((total, curr) => total * curr),
-		};
+  setGlobal(identifier: Identifier, value: TokenValue) {
+    if (this.parent === undefined) this.set(identifier, value);
+    else this.parent.setGlobal(identifier, value);
+  }
 
-		return new Context(scope);
-	}
+  static StandardLibrary(): Context {
+    const operator =
+      (f: (total: any, curr: any) => TokenValue) =>
+      (params: TokenValue[]): TokenValue =>
+        params.reduce((t, c) => f(t, c));
+
+    const scope = {
+      "+": operator((total, curr) => total + curr),
+      "-": operator((total, curr) => total - curr),
+      "/": operator((total, curr) => total / curr),
+      "*": operator((total, curr) => total * curr),
+    };
+
+    return new Context(scope);
+  }
 }

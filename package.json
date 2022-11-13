@@ -16,6 +16,11 @@
 		"test:coverage": "jest --coverage",
 		"lint": "eslint ./src --ext .ts"
 	},
+	"dependencies": {
+		"commander": "^9.4.1",
+		"kleur": "^4.1.5",
+		"prompts": "^2.4.2"
+	},
 	"devDependencies": {
 		"@types/jest": "27.5.2",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
@@ -54,10 +59,5 @@
 				"tsconfig": "tsconfig.json"
 			}
 		}
-	},
-	"dependencies": {
-		"commander": "^9.4.1",
-		"kleur": "^4.1.5",
-		"prompts": "^2.4.2"
 	}
 }

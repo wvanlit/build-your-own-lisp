@@ -1,5 +1,5 @@
 describe("Complete Interpreter", () => {
-	test("is operational", () => {
-		expect(true).toBe(true);
-	});
+  test("is operational", () => {
+    expect(true).toBe(true);
+  });
 });
