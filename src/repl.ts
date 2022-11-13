@@ -23,7 +23,7 @@ while (true) {
 
   try {
     const value = evaluate(input, context);
-    if (value) log(color(value));
+    if (value !== undefined) log(color(value));
   } catch (err) {
     const error = err as Error;
     log(kleur.bold().red(error.message));
@@ -94,5 +94,7 @@ function color(input: TokenValue) {
       if (input instanceof Array) {
         return `[ ${input.map(color).join(", ")} ]`;
       }
+    case "boolean":
+      return kleur.yellow(input ? "true" : "false");
   }
 }
