@@ -9,7 +9,7 @@ import {
   TokenType,
   TokenValue,
 } from "./token";
-import { assert, invalid } from "./util";
+import { invalid } from "./util";
 
 type ScannedCode = string;
 type Scan = ScannedCode[];

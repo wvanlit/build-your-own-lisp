@@ -10,4 +10,7 @@
 > (define add5 (add 5))
 > (add5 2)
 > 7
+> (define isFive (lambda (x) if (= x 5) "yes" "no"))
+> ((isFive 2) (isFive 5) (isFive 55))
+> (no yes no)
 ```

@@ -1,5 +1,7 @@
+import { evaluate } from "../main";
+
 describe("Project", () => {
   test("is operational", () => {
-    expect(true).toBe(true);
+    expect(() => evaluate("")).toThrow();
   });
 });
