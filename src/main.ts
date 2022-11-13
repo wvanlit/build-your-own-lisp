@@ -9,7 +9,7 @@ import {
   TokenType,
   TokenValue,
 } from "./token";
-import { assert, invalid } from "./util";
+import { invalid } from "./util";
 
 type ScannedCode = string;
 type Scan = ScannedCode[];
@@ -45,7 +45,7 @@ export const tokenize = (
 export const categorize = (input: ScannedCode): Token => {
   if (!isNaN(parseFloat(input))) return Token.literal(parseFloat(input));
 
-  if (input[0] === `"` && input[-1] === `"`)
+  if (input.at(0) === `"` && input.at(-1) === `"`)
     return Token.literal(input.slice(1, -1));
 
   if (getKeyword(input)) return Token.keyword(getKeyword(input));
@@ -90,6 +90,8 @@ const interpretKeyword = (input: TokenizedCode[], context: Context) => {
       break;
     case Keyword.Lambda:
       return createLambda(context, body);
+    case Keyword.If:
+      return evalIf(context, body);
   }
 };
 
@@ -118,6 +120,13 @@ const createLambda = (context: Context, input: TokenizedCode[]) => {
 
     return interpret(body, new Context(scope, context));
   };
+};
+
+const evalIf = (context: Context, input: TokenizedCode[]) => {
+  const [condition, thenBranch, elseBranch] = input;
+  const result = interpret(condition, context);
+  const branch = result == true ? thenBranch : elseBranch;
+  return interpret(branch, context);
 };
 
 export const evaluate = (input: string, context?: Context) =>

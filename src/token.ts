@@ -8,6 +8,7 @@ export enum Keyword {
   Define = "define",
   Set = "set!",
   Lambda = "lambda",
+  If = "if",
 }
 
 export const getKeyword = (input: string): Keyword | undefined => {
@@ -19,7 +20,13 @@ export const getKeyword = (input: string): Keyword | undefined => {
 };
 
 export type TokenizedCode = Token | TokenizedCode[];
-export type TokenValue = string | number | Identifier | Lambda | TokenValue[];
+export type TokenValue =
+  | boolean
+  | string
+  | number
+  | Identifier
+  | Lambda
+  | TokenValue[];
 export type Lambda = (tokens: TokenValue[]) => TokenValue;
 export type Identifier = string;
 

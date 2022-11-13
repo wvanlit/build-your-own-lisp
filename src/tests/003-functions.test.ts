@@ -52,3 +52,33 @@ describe("Functions", () => {
     expect(actual3).toEqual(12);
   });
 });
+
+describe("If expression", () => {
+  test("Can do boolean conditions", () => {
+    expect(evaluate("(<= 5 2)")).toEqual(false);
+    expect(evaluate("(<= 1 2)")).toEqual(true);
+
+    expect(evaluate("(>= 5 2)")).toEqual(true);
+    expect(evaluate("(>= 1 2)")).toEqual(false);
+
+    expect(evaluate("(= #t #t)")).toEqual(true);
+    expect(evaluate("(= #f #f)")).toEqual(true);
+
+    expect(evaluate("(!= #f #f)")).toEqual(false);
+    expect(evaluate("(!= #t #t)")).toEqual(false);
+
+    expect(evaluate("(!= #f #t)")).toEqual(true);
+    expect(evaluate("(!= #t #f)")).toEqual(true);
+  });
+
+  test("Can do if conditions", () => {
+    expect(evaluate("(if #t 1 2)")).toEqual(1);
+    expect(evaluate("(if #f 1 2)")).toEqual(2);
+
+    expect(evaluate("(if (= 0 0) 1 2)")).toEqual(1);
+    expect(evaluate("(if (= 1 0) 1 2)")).toEqual(2);
+
+    expect(evaluate("(if (> 1 0) 1 2)")).toEqual(1);
+    expect(evaluate("(if (< 1 0) 1 2)")).toEqual(2);
+  });
+});
