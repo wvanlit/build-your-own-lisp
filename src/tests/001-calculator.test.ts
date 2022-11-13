@@ -26,6 +26,14 @@ describe("Scan", () => {
     expect(actual).toEqual(expected);
   });
 
+  test("Can scan strings", () => {
+    const given = `("hello" "world")`;
+    const expected = ["(", `"hello"`, `"world"`, ")"];
+    const actual = scan(given);
+
+    expect(actual).toEqual(expected);
+  });
+
   test("Can scan multiple expressions", () => {
     const given = "(+ 1 1) (* 1 2)";
     const expected = ["(", "+", "1", "1", ")", "(", "*", "1", "2", ")"];
@@ -55,6 +63,14 @@ describe("Tokenize", () => {
       Token.literal(1),
       [Token.identifier("-"), Token.literal(1), Token.literal(1)],
     ];
+    const actual = tokenize(given);
+
+    expect(actual).toEqual(expected);
+  });
+
+  test("Can tokenize strings", () => {
+    const given = ["(", `"hello"`, `"world"`, ")"];
+    const expected = [Token.literal("hello"), Token.literal("world")];
     const actual = tokenize(given);
 
     expect(actual).toEqual(expected);

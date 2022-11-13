@@ -45,7 +45,7 @@ export const tokenize = (
 export const categorize = (input: ScannedCode): Token => {
   if (!isNaN(parseFloat(input))) return Token.literal(parseFloat(input));
 
-  if (input[0] === `"` && input[-1] === `"`)
+  if (input.at(0) === `"` && input.at(-1) === `"`)
     return Token.literal(input.slice(1, -1));
 
   if (getKeyword(input)) return Token.keyword(getKeyword(input));
