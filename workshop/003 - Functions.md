@@ -1,5 +1,7 @@
 # 003 - Functions
 
+[ [previous step](./002%20-%20Variables.md) | [next step](./004%20-%20Next%20Steps.md) ]
+
 ## End Result
 
 ```scheme
