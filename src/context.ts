@@ -32,11 +32,27 @@ export class Context {
       (params: TokenValue[]): TokenValue =>
         params.reduce((t, c) => f(t, c));
 
+    const boolOperator =
+      (f: (a: any, b: any) => TokenValue) =>
+      (params: TokenValue[]): TokenValue =>
+        params.every((a, i, arr) => (i == 0 ? true : f(arr[i - 1], a)));
+
     const scope = {
+      "#t": true,
+      "#f": false,
+
       "+": operator((total, curr) => total + curr),
       "-": operator((total, curr) => total - curr),
       "/": operator((total, curr) => total / curr),
       "*": operator((total, curr) => total * curr),
+
+      "<": boolOperator((a, b) => a < b),
+      ">": boolOperator((a, b) => a > b),
+      "<=": boolOperator((a, b) => a <= b),
+      ">=": boolOperator((a, b) => a >= b),
+
+      "=": boolOperator((a, b) => a === b),
+      "!=": boolOperator((a, b) => a !== b),
     };
 
     return new Context(scope);

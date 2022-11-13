@@ -90,6 +90,8 @@ const interpretKeyword = (input: TokenizedCode[], context: Context) => {
       break;
     case Keyword.Lambda:
       return createLambda(context, body);
+    case Keyword.If:
+      return evalIf(context, body);
   }
 };
 
@@ -118,6 +120,13 @@ const createLambda = (context: Context, input: TokenizedCode[]) => {
 
     return interpret(body, new Context(scope, context));
   };
+};
+
+const evalIf = (context: Context, input: TokenizedCode[]) => {
+  const [condition, thenBranch, elseBranch] = input;
+  const result = interpret(condition, context);
+  const branch = result == true ? thenBranch : elseBranch;
+  return interpret(branch, context);
 };
 
 export const evaluate = (input: string, context?: Context) =>
