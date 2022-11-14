@@ -1,5 +1,6 @@
 import { Context } from "./context";
 import {
+  AbstractSyntaxTree,
   getKeyword,
   Identifier,
   isToken,
@@ -25,20 +26,23 @@ export const scan = (input: string): Scan => {
 
 export const tokenize = (
   scanned: Scan,
-  list: TokenizedCode[] = []
-): TokenizedCode => {
+  tokens: TokenizedCode[] = []
+): AbstractSyntaxTree => {
   const token: ScannedCode | undefined = scanned.shift();
 
   switch (token) {
     case undefined:
-      return list.pop()!;
+      return tokens.pop()!; // Force not null/undefined
     case "(":
-      list.push(tokenize(scanned, []));
-      return tokenize(scanned, list);
+      const list = tokenize(scanned, []);
+      tokens.push(list);
+      return tokenize(scanned, tokens);
     case ")":
-      return list;
+      return tokens;
     default:
-      return tokenize(scanned, list.concat(categorize(token)));
+      const categorized = categorize(token);
+      const next = tokens.concat(categorized);
+      return tokenize(scanned, next);
   }
 };
 
@@ -56,7 +60,7 @@ export const categorize = (input: ScannedCode): Token => {
 export const parse = (input: string) => tokenize(scan(input));
 
 export const interpret = (
-  input: TokenizedCode,
+  input: AbstractSyntaxTree,
   context: Context = Context.StandardLibrary()
 ) => {
   if (input instanceof Array) return interpretList(input, context);
