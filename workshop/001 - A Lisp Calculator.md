@@ -1,6 +1,6 @@
 # 001 - A Lisp Calculator
 
-[ [previous step](./000%20-%20Introduction.md) | [next step](./002%20-%20Variables.md) ]
+[ [index](../README.md) | [next step](./002%20-%20Variables.md) ]
 
 We’ll begin by implementing the interpreter as a simple “calculator”. Like a regular calculator, it will be able to perform basic arithmetic operations on numbers. But it will also support string and list operations.
 
@@ -259,3 +259,5 @@ Some things to try:
 - `(- (+ 1 2 3) (* 1 2 3))`
 - `(/ 1 2 3)`
 - `("Hello" "World" "!")`
+
+[ [index](../README.md) | [next step](./002%20-%20Variables.md) ]

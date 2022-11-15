@@ -1,14 +1,28 @@
 # Build your own Lisp
 
-A workshop about building a small lisp interpreter.
+[ [get started here](./workshop/001%20-%20A%20Lisp%20Calculator.md) ]
 
-Go to the [introduction](./workshop/000%20-%20Introduction.md) to get started.
+## What is this?
 
-## Required
+This is a short (1h-1.5h) workshop about building a small Lisp Interpreter.
 
-- Node.js 14+
+## What do I need?
 
-## How to start / test
+- [Node.js LTS](https://nodejs.org/en/) (v14+)
+- [VS Code](https://code.visualstudio.com/)
 
-- Run `npm run start` to start an interactive Read Eval Print loop
+## What will be the end result?
+
+![gif of REPL](./)
+
+## How to start / test the code
+
+- Run `npm run start` to start an interactive Read Evaluate Print loop
 - Run `npm run test` to run a test watcher
+
+## References used
+
+- [Little Lisp interpreter](https://maryrosecook.com/blog/post/little-lisp-interpreter) by Mary Rose Cook
+- [(How to Write a (Lisp) Interpreter (in Python))](https://norvig.com/lispy.html) by Peter Norvig
+- [How to Write a Lisp Interpreter in JavaScript](https://chidiwilliams.com/post/how-to-write-a-lisp-interpreter-in-javascript/) by Chidi Williams
+- [Crafting Interpreters](https://craftinginterpreters.com/contents.html) by Robert Nystrom (highly recommended for going deeper into this topic!)

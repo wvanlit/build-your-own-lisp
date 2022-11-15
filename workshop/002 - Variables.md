@@ -170,3 +170,5 @@ Some things to try:
 
 - `(define x 4)` then `(set! y 8)` then `(+ x y)`
 - `(define world "World")` then `("Hello" world "!")`
+
+[ [previous step](./001%20-%20A%20Lisp%20Calculator.md) | [next step](./003%20-%20Functions.md) ]

@@ -46,6 +46,8 @@ It consists of the following steps:
 1. Interpret the `condition` within the current `Context`
 1. If the result of interpreting `condition` equals `true` interpret the `thenBranch` else interpret the `elseBranch`. Return the value from this interpretation.
 
+If done correctly, all tests in `003-functions.test.ts > If expression` should now pass.
+
 <details> 
   <summary> <b>Possible Solution</b>: <i>If you're stuck</i> </summary>
 
@@ -84,6 +86,8 @@ It consists of the following steps:
       - For example, with parameters `(a b)` and arguments `(1 "yes")` it would be `{ a:1, b:"yes" }`
    1. Create a new `Context` with this scope and the current `Context` as a parent
    1. Interpret the `body` with this new `Context` and return the value.
+
+If done correctly, all tests in `003-functions.test.ts > Functions` should now pass.
 
 <details> 
   <summary> <b>Hint</b>: <i>Building the scope</i> </summary>
@@ -126,6 +130,30 @@ const createLambda = (context: Context, input: TokenizedCode[]) => {
     return interpret(body, new Context(scope, context));
   };
 };
+```
+
+</details>
+
+# Final Steps
+
+If all previous steps have been implemented correctly, all tests in `004-lisp.test.ts` should now pass. This means that we have a fully functioning interpreter!
+
+As a test, see if you can write a program that calculates the sum up to a certain number. For example `(sum-to 3)` = 1 + 2 + 3 = 6.
+
+<details> 
+  <summary> <b>Possible Solution</b>: <i>If you're stuck</i> </summary>
+
+```scheme
+(define is-zero (lambda (n) (= n 0)))
+(define dec (lambda (n) (- n 1)))
+
+(define sum-to (lambda (n) (
+  if (is-zero n) 0 (+ n (sum-to (dec n)))
+)))
+
+(sum-to 3)  ; 6
+(sum-to 5)  ; 15
+(sum-to 15) ; 120
 ```
 
 </details>

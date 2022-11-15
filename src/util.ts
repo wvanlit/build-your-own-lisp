@@ -1,5 +1,9 @@
 import { Token, TokenizedCode, TokenType } from "./token";
 
+export const notImplemented = () => {
+  throw new Error("Not Implemented");
+};
+
 export const invalid = () => {
   throw new Error("Invalid program state");
 };
