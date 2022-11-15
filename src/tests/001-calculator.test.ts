@@ -2,14 +2,6 @@ import { interpret, parse, scan, tokenize } from "../main";
 import { Token } from "../token";
 
 describe("Scan", () => {
-  test("Can scan empty string into an empty list", () => {
-    const given = "";
-    const expected = [];
-    const actual = scan(given);
-
-    expect(actual).toEqual(expected);
-  });
-
   test("Can scan expression string into a scanned list", () => {
     const given = "(+ 1 2)";
     const expected = ["(", "+", "1", "2", ")"];

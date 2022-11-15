@@ -2,14 +2,20 @@ import { Context } from "./context";
 import {
   getKeyword,
   Identifier,
-  isToken,
   Keyword,
   Token,
   TokenizedCode,
   TokenType,
   TokenValue,
 } from "./token";
-import { assert, invalid } from "./util";
+import {
+  getTokenValueString,
+  invalid,
+  isNumber,
+  isToken,
+  isTokenType,
+  toToken,
+} from "./util";
 
 type ScannedCode = string;
 type Scan = ScannedCode[];
@@ -19,8 +25,7 @@ export const scan = (input: string): Scan => {
     .replaceAll("(", " ( ")
     .replaceAll(")", " ) ")
     .trim()
-    .split(/\s+/)
-    .filter((s) => s != "");
+    .split(/\s+/);
 };
 
 export const tokenize = (
@@ -43,7 +48,7 @@ export const tokenize = (
 };
 
 export const categorize = (input: ScannedCode): Token => {
-  if (!isNaN(parseFloat(input))) return Token.literal(parseFloat(input));
+  if (isNumber(input)) return Token.literal(parseFloat(input));
 
   if (input[0] === `"` && input[-1] === `"`)
     return Token.literal(input.slice(1, -1));
@@ -66,7 +71,7 @@ export const interpret = (
 };
 
 const interpretList = (input: TokenizedCode[], context: Context) => {
-  if (isToken(input[0]) && input[0].type === TokenType.Keyword)
+  if (isTokenType(input[0], TokenType.Keyword))
     return interpretKeyword(input, context);
 
   const list: TokenValue = input.map((x) => interpret(x, context));
@@ -78,46 +83,56 @@ const interpretList = (input: TokenizedCode[], context: Context) => {
 };
 
 const interpretKeyword = (input: TokenizedCode[], context: Context) => {
-  const [head, ...body] = input;
+  const [head, ...args] = input;
   const type = <Keyword>(head as Token).value;
 
   switch (type) {
     case Keyword.Define:
-      defineVariable(context, body);
+      defineVariable(context, args);
       break;
     case Keyword.Set:
-      setGlobalVariable(context, body);
+      setGlobalVariable(context, args);
       break;
     case Keyword.Lambda:
-      return createLambda(context, body);
+      return createLambda(context, args);
+    case Keyword.If:
+      return evalIf(context, args);
   }
 };
 
-const defineVariable = (context: Context, body: TokenizedCode[]) => {
-  const [variable, value] = body;
-  if (!isToken(variable)) return invalid();
-  context.set(variable.value.toString(), interpret(value, context));
+const defineVariable = (context: Context, args: TokenizedCode[]) => {
+  const [variable, value] = args;
+  context.set(getTokenValueString(variable), interpret(value, context));
 };
 
-const setGlobalVariable = (context: Context, body: TokenizedCode[]) => {
-  const [variable, value] = body;
-  if (!isToken(variable)) return invalid();
-  context.setGlobal(variable.value.toString(), interpret(value, context));
+const setGlobalVariable = (context: Context, args: TokenizedCode[]) => {
+  const [variable, value] = args;
+  context.setGlobal(getTokenValueString(variable), interpret(value, context));
 };
 
 const createLambda = (context: Context, input: TokenizedCode[]) => {
-  return (args: TokenValue[]) => {
-    const [params, ...body] = input;
-    if (isToken(params)) return invalid();
+  const [params, body] = input;
+  if (isToken(params)) return invalid();
 
-    const scope = params.reduce((acc, x, i) => {
-      if (!isToken(x)) return invalid();
-      acc[x.value.toString()] = args[i];
-      return acc;
-    }, {});
+  return (args: TokenValue[]) => {
+    const scope = {};
+
+    for (let index = 0; index < args.length; index++) {
+      const argument = args[index];
+      const parameter = getTokenValueString(params[index]);
+
+      scope[parameter] = argument;
+    }
 
     return interpret(body, new Context(scope, context));
   };
+};
+
+const evalIf = (context: Context, args: TokenizedCode[]) => {
+  const [condition, thenBranch, elseBranch] = args;
+  const result = interpret(condition, context);
+  const branch = result == true ? thenBranch : elseBranch;
+  return interpret(branch, context);
 };
 
 export const evaluate = (input: string, context?: Context) =>

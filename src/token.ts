@@ -44,5 +44,10 @@ export class Token {
   }
 }
 
-export const isToken = (tokenized: TokenizedCode): tokenized is Token =>
-  tokenized instanceof Token;
+export const getKeyword = (input: string): Keyword | undefined => {
+  const found = Object.entries(Keyword).find(
+    ([, literal]) => literal === input
+  );
+
+  return found === undefined ? undefined : found[1];
+};

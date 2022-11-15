@@ -4,7 +4,7 @@ import { Keyword, Token } from "../token";
 
 describe("Functions", () => {
   test("Can parse lambda correctly", () => {
-    const code = `(define add (lambda (x y) + x y 1))`;
+    const code = `(define add (lambda (x y) (+ x y 1)))`;
     const actual = parse(code);
     const expected = [
       Token.keyword(Keyword.Define),
@@ -12,10 +12,12 @@ describe("Functions", () => {
       [
         Token.keyword(Keyword.Lambda),
         [Token.identifier("x"), Token.identifier("y")], // Arguments are in separate list
-        Token.identifier("+"),
-        Token.identifier("x"),
-        Token.identifier("y"),
-        Token.literal(1),
+        [
+          Token.identifier("+"),
+          Token.identifier("x"),
+          Token.identifier("y"),
+          Token.literal(1),
+        ],
       ],
     ];
 
@@ -25,7 +27,7 @@ describe("Functions", () => {
   test("Can evaluate lambda", () => {
     const context = Context.StandardLibrary();
 
-    const definition = evaluate(`(define add (lambda (x y) + x y))`, context);
+    const definition = evaluate(`(define add (lambda (x y) (+ x y)))`, context);
     expect(definition).toEqual(undefined);
 
     const actual = evaluate("(add 1 2)", context);
@@ -38,7 +40,7 @@ describe("Functions", () => {
   test("Can evaluate lambda with lambda return value", () => {
     const context = Context.StandardLibrary();
 
-    evaluate(`(define add (lambda (x) lambda (y) + x y))`, context);
+    evaluate(`(define add (lambda (x) (lambda (y) (+ x y))))`, context);
     evaluate(`(define add1 (add 1))`, context);
     evaluate(`(define add5 (add 5))`, context);
 
