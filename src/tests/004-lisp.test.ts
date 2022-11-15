@@ -1,3 +1,6 @@
+import { Context } from "../context";
+import { evaluate } from "../main";
+
 describe("Complete Interpreter", () => {
   test("Can do factorial", () => {
     const context = Context.StandardLibrary();

@@ -1,3 +1,19 @@
+export type AbstractSyntaxTree = TokenizedCode;
+
+export type TokenizedCode = Token | TokenizedCode[];
+
+export type TokenValue =
+  | boolean
+  | string
+  | number
+  | Identifier
+  | Lambda
+  | TokenValue[];
+
+export type Lambda = (tokens: TokenValue[]) => TokenValue;
+
+export type Identifier = string;
+
 export enum TokenType {
   Identifier,
   Literal,
@@ -8,20 +24,8 @@ export enum Keyword {
   Define = "define",
   Set = "set!",
   Lambda = "lambda",
+  If = "if",
 }
-
-export const getKeyword = (input: string): Keyword | undefined => {
-  const found = Object.entries(Keyword).find(
-    ([, literal]) => literal === input
-  );
-
-  return found === undefined ? undefined : found[1];
-};
-
-export type TokenizedCode = Token | TokenizedCode[];
-export type TokenValue = string | number | Identifier | Lambda | TokenValue[];
-export type Lambda = (tokens: TokenValue[]) => TokenValue;
-export type Identifier = string;
 
 export class Token {
   type: TokenType;
