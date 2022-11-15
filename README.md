@@ -13,7 +13,7 @@ This is a short (1h-1.5h) workshop about building a small Lisp Interpreter.
 
 ## What will be the end result?
 
-![gif of REPL](./)
+![gif of REPL](./docs/repl_example.gif)
 
 ## How to start / test the code
 
