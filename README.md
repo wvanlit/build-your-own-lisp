@@ -17,6 +17,7 @@ This is a short (1h-1.5h) workshop about building a small Lisp Interpreter.
 
 ## How to start / test the code
 
+- Before doing anything, run `npm install` once to install all the necessary dependencies
 - Run `npm run start` to start an interactive Read Evaluate Print loop
 - Run `npm run test` to run a test watcher
 
